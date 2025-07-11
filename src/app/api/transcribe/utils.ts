@@ -26,7 +26,9 @@ export const transcribeAudio = async (
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
       model: "whisper-1",
-      language: "en",
+      // Enable language detection by omitting the language parameter or set to null
+      // language: null,
+      // You can add other parameters here to improve accuracy if needed
     });
 
     // Update progress

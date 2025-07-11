@@ -59,8 +59,10 @@ export default function ChatPage() {
       const startRecording = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // Try using 'audio/webm;codecs=opus' for better compatibility and quality
           const mediaRecorder = new MediaRecorder(stream, {
-            mimeType: 'audio/webm',
+            mimeType: 'audio/webm;codecs=opus',
+            audioBitsPerSecond: 128000, // Set bitrate for better quality
           });
           mediaRecorderRef.current = mediaRecorder;
           chunksRef.current = [];
