@@ -101,6 +101,8 @@ export default function ChatPage() {
                   throw new Error(data.error || 'Transcription failed');
                 }
 
+                console.log("text from audio : ", data.text);
+
                 if (data.text) {
                   console.log("text from audio : ", data.text);
                   handleSubmit(data.text);
