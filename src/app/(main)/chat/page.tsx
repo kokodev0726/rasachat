@@ -166,39 +166,24 @@ export default function ChatPage() {
         throw new Error('Failed to send message');
       }
 
+      const responseData = await response.json();
+
       // Add user message immediately
       const userMessage: Message = {
         role: 'user',
-        message: (await response.json()).data,
+        message: message,
         created_at: new Date().toISOString()
       };
-      setMessages(prev => [...prev, userMessage]);
 
-      // // Handle streaming response
-      // const reader = response.body?.getReader();
-      // if (!reader) {
-      //   throw new Error('No reader available');
-      // }
+      // Add bot message from response
+      const botMessage: Message = {
+        role: 'assistant',
+        message: responseData.message || '',
+        created_at: new Date().toISOString()
+      };
 
-      // while (true) {
-      //   const { done, value } = await reader.read();
-      //   if (done) break;
+      setMessages(prev => [...prev, userMessage, botMessage]);
 
-      //   // Decode the stream chunk and update the current streaming message
-      //   const text = new TextDecoder().decode(value);
-      //   setCurrentStreamingMessage(prev => prev + text);
-      // }
-
-      // // After stream is complete, fetch all messages to update the UI
-      // const messagesResponse = await fetch('/api/chat', {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   }
-      // });
-      // const result = (await messagesResponse.json()).data;
-      // setMessages(result);
-      // setCurrentStreamingMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
       setError(error instanceof Error ? error.message : 'Failed to send message');
