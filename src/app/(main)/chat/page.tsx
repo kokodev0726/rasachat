@@ -85,6 +85,16 @@ export default function ChatPage() {
               try {
                 setIsProcessing(true);
                 const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+
+                // Analyze audio blob duration and size
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audioElement = new Audio(audioUrl);
+                audioElement.addEventListener('loadedmetadata', () => {
+                  console.log('Audio duration (seconds):', audioElement.duration);
+                  console.log('Audio size (bytes):', audioBlob.size);
+                  console.log('Audio type:', audioBlob.type);
+                });
+
                 const formData = new FormData();
                 formData.append('audio', audioBlob);
 
