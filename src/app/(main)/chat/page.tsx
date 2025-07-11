@@ -101,10 +101,10 @@ export default function ChatPage() {
                   throw new Error(data.error || 'Transcription failed');
                 }
 
-                console.log("text from audio : ", data.text);
+                console.log("1.text from audio : ", data.text);
 
                 if (data.text) {
-                  console.log("text from audio : ", data.text);
+                  console.log("2.text from audio : ", data.text);
                   handleSubmit(data.text);
                 } else {
                   throw new Error('No transcription text received');
