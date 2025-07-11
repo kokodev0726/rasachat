@@ -25,7 +25,7 @@ export const transcribeAudio = async (
     // Call Whisper API using OpenAI SDK
     const transcription = await openai.audio.transcriptions.create({
       file: audioFile,
-      model: "whisper-1",
+      model: "gpt-4o-mini-transcribe",
       // Enable language detection by omitting the language parameter or set to null
       // language: null,
       // You can add other parameters here to improve accuracy if needed
