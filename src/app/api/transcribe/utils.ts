@@ -41,6 +41,7 @@ export const transcribeAudio = async (
 
 export const convertSpeechToText = async (audioBlob: Blob) => {
   try {
+    console.log("AudioBlob", audioBlob)
     // Convert blob to file
     const audioFile = new File([audioBlob], "recording.webm", {
       type: "audio/webm",

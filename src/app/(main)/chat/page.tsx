@@ -29,20 +29,22 @@ export default function ChatPage() {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight
     }
   }, [messages]);
+  console.log("This is in chat")
 
   useEffect(() => {
-    const func = async () => {
-      const response = await fetch('/api/chat', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const result = (await response.json()).data;
-      setMessages(result);
-    }
+    // const func = async () => {
+    //   const response = await fetch('/api/chat', {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     }
+    //   });
+    //   const result = (await response.json()).data;
+    //   setMessages(result);
+    // }
 
-    func()
+    // console.log("Loading Chat page")
+    // func()
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
@@ -167,36 +169,36 @@ export default function ChatPage() {
       // Add user message immediately
       const userMessage: Message = {
         role: 'user',
-        message: message,
+        message: (await response.json()).data,
         created_at: new Date().toISOString()
       };
       setMessages(prev => [...prev, userMessage]);
 
-      // Handle streaming response
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('No reader available');
-      }
+      // // Handle streaming response
+      // const reader = response.body?.getReader();
+      // if (!reader) {
+      //   throw new Error('No reader available');
+      // }
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      // while (true) {
+      //   const { done, value } = await reader.read();
+      //   if (done) break;
 
-        // Decode the stream chunk and update the current streaming message
-        const text = new TextDecoder().decode(value);
-        setCurrentStreamingMessage(prev => prev + text);
-      }
+      //   // Decode the stream chunk and update the current streaming message
+      //   const text = new TextDecoder().decode(value);
+      //   setCurrentStreamingMessage(prev => prev + text);
+      // }
 
-      // After stream is complete, fetch all messages to update the UI
-      const messagesResponse = await fetch('/api/chat', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const result = (await messagesResponse.json()).data;
-      setMessages(result);
-      setCurrentStreamingMessage('');
+      // // After stream is complete, fetch all messages to update the UI
+      // const messagesResponse = await fetch('/api/chat', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   }
+      // });
+      // const result = (await messagesResponse.json()).data;
+      // setMessages(result);
+      // setCurrentStreamingMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
       setError(error instanceof Error ? error.message : 'Failed to send message');

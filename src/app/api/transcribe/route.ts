@@ -19,6 +19,7 @@ export async function POST(request: Request) {
       size: audioFile.size,
     });
 
+    console.log("First Step")
     // Check file size (Whisper API limit is 25MB)
     if (audioFile.size > 25 * 1024 * 1024) {
       return NextResponse.json(
@@ -26,9 +27,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
+    console.log("Next step")
     try {
       // Use the utility function to transcribe the audio
+      console.log("audiofile", audioFile)
       const text = await convertSpeechToText(audioFile);
       return NextResponse.json({ text });
     } catch (error: Error | unknown) {
