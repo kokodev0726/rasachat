@@ -102,6 +102,7 @@ export default function ChatPage() {
                 }
 
                 if (data.text) {
+                  console.log("text from audio : ", data.text);
                   handleSubmit(data.text);
                 } else {
                   throw new Error('No transcription text received');
