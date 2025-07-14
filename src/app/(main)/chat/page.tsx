@@ -32,19 +32,19 @@ export default function ChatPage() {
   console.log("This is in chat")
 
   useEffect(() => {
-    // const func = async () => {
-    //   const response = await fetch('/api/chat', {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     }
-    //   });
-    //   const result = (await response.json()).data;
-    //   setMessages(result);
-    // }
+    const func = async () => {
+      const response = await fetch('/api/chat', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const result = (await response.json()).history;
+      setMessages(result);
+    }
 
-    // console.log("Loading Chat page")
-    // func()
+    console.log("Loading Chat page")
+    func()
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {

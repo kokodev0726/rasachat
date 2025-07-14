@@ -1,16 +1,55 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  // const { error, data } = await supabase
-  //   .from("messages")
-  //   .select("*")
-  //   .order("created_at", { ascending: true });
+  const senderId = 'user'; // Replace this dynamically in a real app
 
-  // if (error) {
-  //   return NextResponse.json({ error: error.message }, { status: 500 });
-  // }
-  // return NextResponse.json({ data });
+  try {
+    const response = await fetch(`http://localhost:5005/conversations/user/tracker`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'charset': 'UTF-8',
+      },
+    });
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch tracker from Rasa" },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+
+    const messages = data.events
+      .filter((event: any) => event.event === 'user' || event.event === 'bot')
+      .map((event: any) => {
+        const sender = event.event === 'user' ? 'user' : 'bot';
+        return {
+          sender,
+          text: event.text ?? '',
+          time: new Date(event.timestamp * 1000).toISOString(),
+        };
+      });
+
+    return NextResponse.json(
+      {
+        sender_id: senderId,
+        history: messages,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error fetching chat history:', error);
+
+    return NextResponse.json(
+      { error: "Invalid response from chatbot service" },
+      { status: 500 }
+    );
+  }
 }
+
 
 export async function POST(req: Request) {
   try {
